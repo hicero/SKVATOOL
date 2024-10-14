@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S.K.V.A. Vocalize TOOL</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.option-button {
+    padding: 10px 20px;
+    margin: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.option-button:hover {
+    background-color: #45a049;
+}
+
+.result {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #333;
+}
+
+
+/* New Luxury Styles */
+body {
+    font-family: 'Georgia', serif;
+    background-color: #9b9bbd;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', serif;
+    color: #444;
+font-size : 3rem
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+font-size: 1.4rem
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+textarea, input {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-family: 'Georgia', serif;
+}
+
+#trackingIdsOutput {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ul#trackingIdsList {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul#trackingIdsList li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Subtle animations */
+button, input, textarea {
+    transition: all 0.3s ease;
+}
+
+button:hover, input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Centering content using Flexbox */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+
+/* Button size adjustments */
+button {
+    font-size: 1.2rem; /* Increase general button size */
+    padding: 15px 30px; /* Larger padding for bigger buttons */
+}
+
+button.small {
+    font-size: 0.9rem; /* Slightly smaller for reset and back buttons */
+    padding: 10px 20px;
+}
+
+
+/* Further increase button size */
+button {
+    font-size: 1.3rem; /* Further increase button size */
+    padding: 10px 20px; /* Increase padding for larger buttons */
+}
+
+
+/* 버튼 호버 효과 */
+#heatmapButton1:hover, #heatmapButton2:hover, #heatmapButton3:hover {
+    background-color: #FFA500; /* 호버 시 오렌지색으로 변경 */
+    color: white;
+    transform: scale(1.1); /* 버튼 크기 살짝 확대 */
+}
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>S.K.V.A. Vocalize TOOL</h1>
+    
+    <!-- 질문 및 선택 영역 -->
+    <div id="question-container">
+        <p>당신의 목소리는 어떤 느낌인가요?</p>
+        <button class="option-button" onclick="nextStep('Breathy')">호흡음 (Breathy)</button>
+        <button class="option-button" onclick="nextStep('Normal')">정상 (Normal)</button>
+        <button class="option-button" onclick="nextStep('Pressed')">눌림 (Pressed)</button>
+    </div>
+    
+    <!-- 결과 표시 영역 -->
+    <div id="result" class="result"></div>
+    
+    <!-- YES/NO 버튼 및 추가 내용 표시 영역 -->
+   <div id="feedback" style="display: none;">
+        <button id="yesButton">YES</button>
+        <button id="noButton">NO</button>
+    </div> 
+    <div id="additionalInfo" class="result"></div>
+
+    <!-- 뒤로 가기 및 리셋 버튼 영역 -->
+    <div id="controls"></div>
+
+
+</div>
+
+    <div id="buttonContainer" style="position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <button id="heatmapButton1" style="padding: 10px 20px;  color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">영어-자모표</button>
+        <button id="heatmapButton2" style="padding: 10px 20px;  color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">한글-자모표</button>
+        <button id="heatmapButton3" style="padding: 10px 20px; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">세미표</button>
+    </div>
+    </body>
+    
+    <!-- JavaScript 파일 연결 -->
+<script>const tree = {
+    'Breathy': {
+        'Whoop': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: 옐한 모음화,성구전환 <br>
+                        추천발음 : 싸(thA)/패/싸(Sa)<br>
+                        추천받침 : ㅅ ㅂ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬)  빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: 옐한 모음화,성구전환 <br>
+                        추천발음 : 으바(βa) /깨/따/꾜<br>
+                        추천받침 : ㄱ ㅅ ㅂ<br>
+                        추천 스케일: 옥타브 리피터,5톤,8톤 아르페지오 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: 성구전환시 Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 나/ 마/ 냄/ 맴/봐(Va)<br>
+                        추천받침 : ㄴ ㅁ ㅇ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+    '푸는플립': {
+                    '결과': `
+                        목적: Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 파/바(va)/마<br>
+                        추천받침 : ㅂ, ㅁ<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+    '강한 플립': {
+                    '결과': `
+                        목적: Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 없음 <br>
+                        추천받침 : 없음<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+
+
+                '풀헤드': {
+                    '결과': `
+                        목적: 체스트 내려올수있게 인지시키기 <br>
+                        추천발음 : 으바(βa)/ 까/ 싸(thA) <br>
+                        추천받침 : ㄲ ㅆ<br>
+                        추천 스케일: 엣지 스케일 , 5톤 8톤 하행 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            }
+        },
+        'Yell': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: 웁한 모음화, 성구전환 <br>
+                        추천발음 : 구/ 기/ 부 <br>
+                        추천받침 : ㄱ ㅂ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬) 빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: 웁한 모음화, 성구전환 <br>
+                        추천발음 : 티<두<뚜 <br>
+                        추천받침 : ㄱ ㅂ<br>
+                        추천 스케일: 옥타브 리피터,5톤,8톤 아르페지오 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: 성구전환시 Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 무 누 노우 <br>
+                        추천받침 : ㅁ ㄴㅇ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+                '푸는 플립': {
+                    '결과': `
+                        목적: Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 쀼 꾸 꿰 <br>
+                        추천받침 : ㅂ ㄱ ㅁ ㅇ<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '강한 플립': {
+                    '결과': `
+                        목적: Neutral 유지, 연속성 필요 <br>
+                        추천발음 : 없음<br>
+                        추천받침 : 없음<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '풀헤드': {
+                    '결과': `
+                        목적: 체스트로 내려올수있게 인지시키기 <br>
+                        추천발음 : 으부(βu) 꾸 삐 초<br>
+                        추천받침 : ㅅㅂ<br>
+                        추천 스케일: 엣지 스케일 , 5톤 8톤 하행 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            }
+        }
+    },
+    'Normal': {
+        'Whoop': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: 옐한 모음화, 성구전환 <br>
+                        추천발음 : 나/ 마/ 하<br>
+                        추천받침 : ㄴ,ㅁ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬) 빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: 옐한 모음화, 성구전환 <br>
+                        추천발음 : 까/ 깨 / 빠/ 빼<br>
+                        추천받침 : ㄱ ㅂ<br>
+                        추천 스케일: 옥타브 리피터,5톤,8톤 아르페지오 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: 성구전환시 Neutral  유지, 연속성 필요<br>
+                        추천발음 : 슈와 발음 기호 /ə/<br>
+                        추천받침 : ㄹ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+                '푸는 플립': {
+                    '결과': `
+                        목적: Neutral  유지, 연속성 필요<br>
+                        추천발음 : 파/ 바(va)/ 마<br>
+                        추천받침 : ㅂ ㅁ<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '강한 플립': {
+                    '결과': `
+                        목적: Neutral  유지, 연속성 필요<br>
+                        추천발음 : 해/ 하/ 흐<br>
+                        추천받침 : 없음<br>
+                        추천 스케일: 옥타브다운, 코드톤 하행, 코드톤 하행 3x, 브로큰 아르페지오
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '풀헤드': {
+                    '결과': `
+                        목적: 체스트 내려올수있게 인지시키기<br>
+                        추천발음 : 타, 빠, 빼<br>
+                        추천받침 : ㅅ, ㅂ<br>
+                        추천 스케일: 엣지 스케일 , 5톤 8톤 하행 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+         }
+        },
+        'Yell': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: 웁한 모음화, 성구전환<br>
+                        추천발음 : 구 기 티<br>
+                        추천받침 : ㄱ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬) 빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: 웁한 모음화, 성구전환<br>
+                        추천발음 : 꾸/ 끼/ 띠 뿌 삐<br>
+                        추천받침 : ㄱ ㅂ<br>
+                        추천 스케일: 옥타브 리피터,5톤,8톤 아르페지오 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: 성구전환시 Neutral  유지, 연속성 필요<br>
+                        추천발음 : 으뷔(β+ㅟ) 무 모<br>
+                        추천받침 : ㅁ ㅇ ㄹ<br>
+                        추천 스케일: 옥타브 리피터,5톤,8톤 아르페지오 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+                '푸는 플립': {
+                    '결과': `
+                        목적: Neutral 유지, 연속성 필요<br>
+                        추천발음 :  뤼 위<br>
+                        추천받침 : ㄹ ㄴ<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '강한 플립': {
+                    '결과': `
+                        목적: 성구의 연결성 확보, 연속성 필요<br>
+                        추천발음 :  루 후 히<br>
+                        추천받침 : ㄹ<br>
+                        추천 스케일: 옥타브다운,롱스케일 하행, 브로큰 아르페지오
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '풀헤드': {
+                    '결과': `
+                        목적: 체스트로 내려올수있게 인지시키기<br>
+                        추천발음 :  으부(βu) 토 초 삐<br>
+                        추천받침 : ㅅㅂ<br>
+                        추천 스케일: 엣지 스케일 , 5톤 8톤 하행 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            }
+        }
+    },
+    'Pressed': {
+        'Whoop': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: 옐한 모음화, 성구전환<br>
+                        추천발음 :  하(hA) 흠맘(H+Mam)<br>
+                        추천받침 : ㅁ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬) 빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: X<br>
+                        추천발음 :  X<br>
+                        추천받침 : X<br>
+                        추천 스케일: X
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: 성구전환시 Neutral 유지, 연속성 필요<br>
+                        추천발음 :  퍄 햐 내 / 마<br>
+                        추천받침 : ㄴ,ㅇ,ㅁ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+                '푸는 플립': {
+                    '결과': `
+                        목적: 자연스러운 공명감 및 Neutral 유지<br>
+                        추천발음 :  로 래 타<br>
+                        추천받침 : ㄱ ㅅ ㅂ<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '강한 플립': {
+                    '결과': `
+                        목적: 과한 힘 제거 및 적절한 Neutral 유지<br>
+                        추천발음 :  마 매 하<br>
+                        추천받침 : ㅁ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '풀 헤드': {
+                    '결과': `
+                        목적: 성구전환시 Neutral 유지, 연속성 필요<br>
+                        추천발음 :  퍄 햐 내 / 마<br>
+                        추천받침 : ㄴ,ㅇ,ㅁ<br>
+                        추천 스케일: 옥타브다운,롱스케일 등  각종 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            }
+        },
+        'Yell': {
+            '상행': {
+                '풀체스트': {
+                    '결과': `
+                        목적: Lax vox 등으로 이너티브한 밸런스 잡기 최우선<br>
+                        추천발음 :  후 히<br>
+                        추천받침 : ㄴ,ㅇ,ㅁ<br>
+                        추천 스케일: 1.5 아르페지오, 코드톤 하행, 코드톤 하행 3세트(리드미컬) 빠른 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '노체스트': {
+                    '결과': `
+                        목적: X<br>
+                        추천발음 :  X<br>
+                        추천받침 : X<br>
+                        추천 스케일: X
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '플립': {
+                    '결과': `
+                        목적: Lax vox 등으로 이너티브한 밸런스 잡기 최우선<br>
+                        추천발음 :  후 히 미 내<br>
+                        추천받침 : ㅁ ㄴ<br>
+                        추천 스케일: 없음
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            },
+            '하행': {
+                '푸는 플립': {
+                    '결과': `
+                        목적: Lax vox 등으로 이너티브한 밸런스 잡기 최우선<br>
+                        추천발음 :  쉬 뉘 <br>
+                        추천받침 : 없음<br>
+                        추천 스케일: 5톤 8톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '강한 플립': {
+                    '결과': `
+                        목적: Lax vox 등으로 이너티브한 밸런스 잡기 최우선<br>
+                        추천발음 :  뤼 휘<br>
+                        추천받침 : 없음<br>
+                        추천 스케일: 옥타브다운,롱스케일 하행, 코드톤 하행
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                },
+                '풀헤드': {
+                    '결과': `
+                        목적: Lax vox 등으로 이너티브한 밸런스 잡기 최우선<br>
+                        추천발음 :  삐 미 끼 가<br>
+                        추천받침 : ㄱ ㅂ <br>
+                        추천 스케일: 엣지 스케일 , 5톤 8톤 하행 느린 템포
+<br><br><p style="font-weight:bold">목소리가 개선되었나요?</p>`
+                }
+            }
+        }
+    }
+};
+
+// 선택 추적을 위한 변수
+let currentNode = null;
+let history = [];  // 선택한 경로의 키를 추적하는 배열
+
+// NO 버튼을 눌렀을 때 노드별 메시지를 저장할 객체
+const noMessages = {
+ 'Breathy > Whoop > 상행 > 풀체스트 > 결과': '몸 재끼기 고개 들기. laxvox 통한 상후두관 조임 시도와 옐한 오픈허밍<br><br>',
+    'Breathy > Whoop > 상행 > 노체스트 > 결과': '몸 숙이기<br><br>',
+    'Breathy > Whoop > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Breathy > Whoop > 하행 > 푸는플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Breathy > Whoop > 하행 > 강한 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Breathy > Whoop > 하행 > 풀헤드 > 결과': '주로 여성,ㅏ가 과하면 ㅐ (호흡량이 많아질때 ㅅ받침이 체스트전환에 긍정적 영향을 주는듯?)<br><br>',
+    'Breathy > Yell > 상행 > 풀체스트 > 결과': '몸 재끼기 고개 들기 손가락 세로로 2개or3개 물, 옐한 오픈 허밍<br><br>',
+    'Breathy > Yell > 상행 > 노체스트 > 결과': '몸 숙이기 ㅌ, ㄷ, ㄸ 내전 정도에 따라 조절, 웁은 아예 입을 다물고 실행<br><br>',
+    'Breathy > Yell > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Breathy > Yell > 하행 > 푸는 플립 > 결과': '강한 자음 + 웁한 모음으로 하행 후 Lax Vox로 돌아가기<br><br>',
+    'Breathy > Yell > 하행 > 강한 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Breathy > Yell > 하행 > 풀헤드 > 결과': '주로 여성, ㅜ가 과하면 ㅗ. 몸 숙이기<br><br>',
+
+    'Normal > Whoop > 상행 > 풀체스트 > 결과': '몸 재끼기 고개 들기. laxvox 통한 상후두관 조임 시도와 옐한 오픈 허밍<br><br>',
+    'Normal > Whoop > 상행 > 노체스트 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Normal > Whoop > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Normal > Whoop > 하행 > 푸는 플립 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Normal > Whoop > 하행 > 강한 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Normal > Whoop > 하행 > 풀헤드 > 결과': '주로 여성(호흡량이 많아질 때 ㅅ받침이 체스트 전환에 긍정적 영향을 주는 듯?)<br><br>',
+    'Normal > Yell > 상행 > 풀체스트 > 결과': '웁한 오픈 허밍<br><br>',
+    'Normal > Yell > 상행 > 노체스트 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Normal > Yell > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Normal > Yell > 하행 > 푸는플립 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Normal > Yell > 하행 > 강한 플립 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Normal > Yell > 하행 > 풀헤드 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+
+    'Pressed > Whoop > 상행 > 풀체스트 > 결과': '템포 매우 빠르게, 몸 재끼기, 고개 들기<br><br>',
+    'Pressed > Whoop > 상행 > 노체스트 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Pressed > Whoop > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Whoop > 하행 > 푸는 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Whoop > 하행 > 강한 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Whoop > 하행 > 풀헤드 > 결과': '추천지시 없음, 자모히트맵 참조<br><br>',
+    'Pressed > Yell > 상행 > 풀체스트 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Yell > 상행 > 노체스트 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Yell > 상행 > 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Yell > 하행 > 푸는 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Yell > 하행 > 강한 플립 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>',
+    'Pressed > Yell > 하행 > 풀헤드 > 결과': 'Lax Vox로 돌아가 이너티브한 상태 유지 유도, 무성구간 해결, 연결<br><br>'
+
+
+
+};
+
+function nextStep(option) {
+    if (!currentNode) {
+        currentNode = tree[option];
+        history.push(option);  // 첫 번째 선택을 history에 추가
+    } else {
+        history.push(option);  // 현재 선택된 옵션(키)을 history에 추가
+        currentNode = currentNode[option];
+    }
+
+    if (typeof currentNode === 'object' && currentNode !== null) {
+        let optionsHTML = '';
+        for (const key in currentNode) {
+            optionsHTML += `<button class="option-button" onclick="nextStep('${key}')">${key}</button>`;
+        }
+        document.getElementById('question-container').innerHTML = `<p>다음 선택지를 고르세요:</p>` + optionsHTML;
+        
+        // YES/NO 버튼 숨기기 (아직 결과를 보여주지 않은 단계)
+        document.getElementById('feedback').style.display = 'none';
+    } else {
+        // 결과를 보여주는 단계
+        document.getElementById('result').innerHTML = `<p>${currentNode}</p>`;
+        document.getElementById('question-container').style.display = 'none';
+        
+        // YES/NO 버튼 보이기 (마지막 단계에서만)
+        document.getElementById('feedback').style.display = 'block';
+    }
+}
+
+function reset() {
+    currentNode = null;
+    history = [];
+    document.getElementById('question-container').style.display = 'block';
+    document.getElementById('result').innerHTML = '';
+    let optionsHTML = '';
+    for (const key in tree) {
+        optionsHTML += `<button class="option-button" onclick="nextStep('${key}')">${key}</button>`;
+    }
+
+    document.getElementById('question-container').innerHTML = `<p>당신의 목소리는 어떤 느낌인가요?</p>` + optionsHTML;
+    
+    // YES/NO 버튼 숨기기 및 추가 정보 영역 초기화
+    document.getElementById('feedback').style.display = 'none';
+    document.getElementById('additionalInfo').innerHTML = '';
+}
+
+function back() {
+    if (history.length > 0) {
+        history.pop();  // 이전 선택을 history에서 제거
+        currentNode = tree;  // 초기 트리로 재설정
+        
+        // 선택 경로를 따라 currentNode를 업데이트
+        for (let i = 0; i < history.length; i++) {
+            currentNode = currentNode[history[i]];
+        }
+
+        let optionsHTML = '';
+        for (const key in currentNode) {
+            optionsHTML += `<button class="option-button" onclick="nextStep('${key}')">${key}</button>`;
+        }
+        document.getElementById('question-container').innerHTML = `<p>다음 선택지를 고르세요:</p>` + optionsHTML;
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('question-container').style.display = 'block';
+        
+        // YES/NO 버튼 숨기기 및 추가 정보 영역 초기화
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('additionalInfo').innerHTML = '';
+    }
+}
+
+// 초기 선택지 표시
+reset();
+
+// 버튼 추가
+document.getElementById('controls').innerHTML = `
+    <button onclick="reset()">Reset</button>
+    <button onclick="back()">Back</button>
+`;
+
+// YES 버튼 클릭 시 처리
+document.getElementById('yesButton').addEventListener('click', function() {
+    const additionalInfoDiv = document.getElementById('additionalInfo');
+    additionalInfoDiv.innerHTML = '잘 해결되었습니다! 다음 단계로 진행하세요.';
+});
+
+// NO 버튼 클릭 시 처리
+document.getElementById('noButton').addEventListener('click', function() {
+    const additionalInfoDiv = document.getElementById('additionalInfo');
+    
+    // 현재 선택된 경로를 문자열로 만듦
+    const path = history.join(' > ');
+    const noMessage = noMessages[path] || '다시 시도해보세요.';
+    additionalInfoDiv.innerHTML = noMessage;
+});
+
+
+
+// Add event listeners for the heatmap buttons to open heatmap images in a new window
+document.addEventListener('DOMContentLoaded', function () {
+    const heatmapButton1 = document.getElementById('heatmapButton1');
+    const heatmapButton2 = document.getElementById('heatmapButton2');
+    const heatmapButton3 = document.getElementById('heatmapButton3');
+    
+    if (heatmapButton1) {
+        heatmapButton1.addEventListener('click', function () {
+            window.open('heatmap/heatmap1.png', '_blank', 'width=800,height=600');
+        });
+    }
+
+    if (heatmapButton2) {
+        heatmapButton2.addEventListener('click', function () {
+            window.open('heatmap/heatmap2.png', '_blank', 'width=800,height=600');
+        });
+    }
+
+    if (heatmapButton3) {
+        heatmapButton3.addEventListener('click', function () {
+            window.open('heatmap/heatmap3.png', '_blank', 'width=800,height=600');
+        });
+    }
+});
+</script>
+</html>
