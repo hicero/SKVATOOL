@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    //<link rel="stylesheet" href="styles.css">
+    <link href='//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>S.K.V.A. Vocalize TOOL</title>
     <style>
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     text-align: center;
     padding: 20px;
 }
 
 .option-button {
-    padding: 10px 20px;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    padding: 15px 30px;
+    font-size: 25px;
     margin: 10px;
-    background-color: #4CAF50;
+    background-color: #3a8d3c;
     color: white;
     border: none;
     border-radius: 5px;
@@ -23,10 +26,11 @@ body {
 }
 
 .option-button:hover {
-    background-color: #45a049;
+    background-color: #68ca6d;
 }
 
 .result {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 20px;
     margin-top: 20px;
     color: #333;
@@ -35,8 +39,8 @@ body {
 
 /* New Luxury Styles */
 body {
-    font-family: 'Georgia', serif;
-    background-color: #9b9bbd;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    background-color: #2d2d3a;
     color: #333;
     margin: 0;
     padding: 0;
@@ -44,7 +48,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Merriweather', serif;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     color: #444;
 font-size : 3rem
 }
@@ -57,10 +61,11 @@ font-size: 1.4rem
 }
 
 button {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     background-color: #333;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 5px 10px;
     border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -76,7 +81,7 @@ textarea, input {
     margin: 10px 0;
     border-radius: 10px;
     border: 1px solid #ddd;
-    font-family: 'Georgia', serif;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 }
 
 #trackingIdsOutput {
@@ -144,8 +149,9 @@ button.small {
 
 /* Further increase button size */
 button {
-    font-size: 1.3rem; /* Further increase button size */
-    padding: 10px 20px; /* Increase padding for larger buttons */
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 1.2rem; /* Further increase button size */
+    padding: 8px 15px; /* Increase padding for larger buttons */
 }
 
 
@@ -616,7 +622,7 @@ function reset() {
         optionsHTML += `<button class="option-button" onclick="nextStep('${key}')">${key}</button>`;
     }
 
-    document.getElementById('question-container').innerHTML = `<p>당신의 목소리는 어떤 느낌인가요?</p>` + optionsHTML;
+    document.getElementById('question-container').innerHTML = `<p>목소리 유형을 선택해주세요.</p>` + optionsHTML;
     
     // YES/NO 버튼 숨기기 및 추가 정보 영역 초기화
     document.getElementById('feedback').style.display = 'none';
